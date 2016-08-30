@@ -1,0 +1,21 @@
+
+
+# Spark Docker for centos7
+
+
+## Running a Standalone Spark cluster using Docker-compose
+1. Build the image ```docker-compose build```
+2. Start up a Spark master and n slaves ```docker-compose up -d && docker-compose scale slave=n```; change n with the number of required slaves.
+3. check the created network by compose ```docker network ls```. This network can be adjusted in the docker-compose.yml file. if you are using vagrant then by default a "vagrant" prefix will be created e.g "vagrant_spark_network"
+4. to destroy the cluster ```docker-compose down```
+
+
+## Run interactive shell
+docker run -it --net spark_network nhjiejan/spark /opt/spark/bin/spark-shell --master spark://master:7077
+
+## Run spark submit
+you can specify additional volume mount points, the mount created exists in "/vagrant/spark_data". place your fat jar in this directory and run:
+
+```docker run -it --net spark_network nhjiejan/spark /opt/spark/bin/spark-submit --master spark://master:7077 ...```
+
+you should specify the above "--master" as this will connect to the slave nodes.
